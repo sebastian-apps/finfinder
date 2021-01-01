@@ -50,6 +50,7 @@ pip install -r requirements.txt
 ## How to Use
 
 Run finfinder.py
+Results will be saved in a finfinder-report JSON file.
 
 Some example PDFs are included. 
 Also, test out your own PDFs. Go to www.sedar.com and download an annual report.
