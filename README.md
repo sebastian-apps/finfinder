@@ -22,3 +22,44 @@ git clone https://github.com/sebastian-apps/finfinder.git
 Create the virtual environment.
 
 ```
+cd finfinder
+python -m venv finfinder_env
+```
+
+Activate the virtual environment <i>for OSX</i>.
+
+```
+source finfinder_env/bin/activate
+```
+
+Activate the virtual environment <i>for Windows</i>.
+
+```
+finfinder_env\Scripts\activate
+```
+
+Install dependencies. The installation works best with Python 3.7.7.
+
+```bash
+pip install -r requirements.txt
+```
+
+
+<br />
+
+## How to Use
+
+Run finfinder.py
+
+Some example PDFs are included. 
+Test out your own PDF. Go to www.sedar.com and download an annual report.
+Under /finfinder/companies/, create a folder with the company name. Add the PDF to that folder.
+
+
+
+
+
+
+
+
+
