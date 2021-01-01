@@ -52,7 +52,7 @@ pip install -r requirements.txt
 Run finfinder.py
 
 Some example PDFs are included. 
-Test out your own PDF. Go to www.sedar.com and download an annual report.
+Also, test out your own PDFs. Go to www.sedar.com and download an annual report.
 Under /finfinder/companies/, create a folder with the company name. Add the PDF to that folder.
 
 
