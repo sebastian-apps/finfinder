@@ -9,4 +9,16 @@ A testing set of 278 PDFs were analyzed, each containing an Income Statement, Ba
 Future versions of Finfinder will extract, transform, and load the financial data.
 
 
+<br />
 
+## Installation
+
+Clone the repository.
+
+```bash
+git clone https://github.com/sebastian-apps/finfinder.git
+```
+
+Create the virtual environment.
+
+```
