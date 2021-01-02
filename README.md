@@ -1,6 +1,6 @@
 # FinFinder
 
-FinFinder parses annual reports in PDF format and finds the page numbers corresponding to the Income Statement, Balance Sheet, and Cash Flow Statement. Page numbers are detected with a Naive Bayes classifier.
+FinFinder parses annual reports in PDF format and finds the page numbers corresponding to the Income Statement, Balance Sheet, and Cash Flow Statement. Statements are detected with a Naive Bayes classifier.
 
 FinFinder is great where financial data are not readily available and organized in a database. For example, SEDAR.com provides all Canadian public securities documents in PDF format, but rarely in XBLR format. This is where FinFinder helps by locating important financial data. 
 
