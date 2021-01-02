@@ -55,6 +55,7 @@ Results will be saved in a finfinder-report JSON file.
 Some example PDFs are included. 
 Also, test out your own PDFs. Go to www.sedar.com and download an annual report.
 Under /finfinder/companies/, create a folder with the company name. Add the PDF to that folder.
+Run finfinder.py
 
 
 
