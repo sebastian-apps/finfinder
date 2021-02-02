@@ -71,11 +71,6 @@ def get_filename_without_path(filename):
 
 
 
-def separate_dirs_and_filename(filename):
-    # The path sometimes contains both '/' and '\' directory delimiters.
-    dirs = filename.replace("\\","/").split("/")
-    return '/'.join(dirs[:-1]) + "/", dirs[-1] # return dirs + filename separately
-
 
 
 def convert_CSV_to_XLSX():
