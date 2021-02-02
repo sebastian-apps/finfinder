@@ -70,12 +70,6 @@ def get_filename_without_path(filename):
     return dirs[-1]
 
 
-def get_local_folder_name(path):
-    return get_filename_without_path(path)
-    # #return rootname.replace(DIRECTORY,'').replace('/','')
-    # dirs = path.replace("\\","/").split("/") #
-    # return dirs[-1]
-
 
 def separate_dirs_and_filename(filename):
     # The path sometimes contains both '/' and '\' directory delimiters.
