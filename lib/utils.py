@@ -60,7 +60,6 @@ def remove_file_extension(filename):
 
 
 def clean_dir_name(dir, main_directory):
-    # Maybe can be replaced by get_filename_without_path
     return dir.replace('/','').replace('\\','').replace(main_directory,'')
 
 
