@@ -84,6 +84,18 @@ def separate_dirs_and_filename(filename):
 
 
 
+def convert_CSV_to_XLSX():
+    print('Converting CSVs into XLSX...\n')
+    for filename in glob.glob("*.csv"):
+        print(filename)
+        wb = Workbook()
+        ws = wb.active
+        with open(filename, 'r') as f:
+            for row in csv.reader(f):
+                ws.append(row)
+        wb.save(remove_file_extension(filename)+ '.xlsx')
+        os.remove(filename)
+
 """ PDF UTILITIES """
 
 def pdf_page_count(filepath):
@@ -122,14 +134,4 @@ def convert_pdf_to_txt(fp, pagenos):
 
 
 
-def convert_CSV_to_XLSX():
-    print('Converting CSVs into XLSX...\n')
-    for filename in glob.glob("*.csv"):
-        print(filename)
-        wb = Workbook()
-        ws = wb.active
-        with open(filename, 'r') as f:
-            for row in csv.reader(f):
-                ws.append(row)
-        wb.save(remove_file_extension(filename)+ '.xlsx')
-        os.remove(filename)
+
