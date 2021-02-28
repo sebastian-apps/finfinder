@@ -175,8 +175,7 @@ def bayesian(text, nbc_probs, category, nb_class):
 
     # Search for all relevant keywords in text
     keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys() if keyword in text]
-    # Calculate for ALL keywords, not just the ones found, as is above code.
-    #keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys()]
+    #keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys()]  # Calculate for ALL keywords, not just the ones found.
 
     # Calculate Likelihood and Evidence
     likelihood = 1
@@ -222,7 +221,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loner
     and occasionally we come up with a "loner" page far away from the others. Hence, in this case, the
     page with the highest posterior is not chosen, and the next one in the sorted list is inspected.
     """
-    # We'll start with the first page numbers and work our way back if there are loner values.
+    # Start with the first page numbers and work our way back if there are loner values.
     count_income = 0
     count_balancesheets = 0
     count_cashflow = 0
@@ -234,10 +233,8 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loner
         b = pages_balancesheets[count_balancesheets]
         c = pages_cashflow[count_cashflow]
         contenders = [a, b, c]
-        print("contenders:", contenders)
+
         loner = is_loner_present(contenders, 6)  # tried 10, got 0.48 accuracy
-        if loner is not None:
-            print("loner:", loner)
         if loner == 0:
             count_income += 1
         elif loner == 1:
@@ -269,11 +266,9 @@ def is_loner_present(num_list, threshold):
     except:
         return None
 
-    #print("Internal A B C:", a,b,c)
     d_ab = abs(a - b)
     d_ac = abs(a - c)
     d_bc = abs(b - c)
-    #print("differences: ", d_ab, ",", d_ac, ",", d_bc)
 
     if d_ab >= threshold and d_ac >= threshold and d_bc < threshold:
         num_pos = 0  # a is the loner
