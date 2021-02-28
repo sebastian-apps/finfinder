@@ -170,9 +170,7 @@ def bayesian(text, nbc_probs, category, nb_class):
     Alternatives to the equation (but didn't seem to work well):
     Option 1) posterior = likelihood + prior   ....evidence eliminated
     Option 2) Using log of probabilities
-
-
-    Can be improved by sending only the relevant portion of nbc_probs
+    
     """
 
     # Search for all relevant keywords in text
