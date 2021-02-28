@@ -76,7 +76,7 @@ def main():
 
                     # for every page in the PDF doc, perform Bayesian analysis for the financial statements
                     for pagenum in range(0, maxpages):
-                        print(f"\n{file}, 1-Based Page Number: {pagenum + 1}")
+                        print(f"\n{file}, Page Number: {pagenum + 1}")
                         try:
                             # Extract text from PDF
                             text = u.convert_pdf_to_txt(fp, {pagenum})
