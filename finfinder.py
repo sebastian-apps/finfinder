@@ -69,7 +69,7 @@ def main():
                     print("No. pages in doc: ", maxpages)
                     fp = open(file, 'rb')  # rb instead of r
 
-                    # Initialize probability lists
+                    # Every page will have an associated probability
                     prob_list_income = []
                     prob_list_balancesheets = []
                     prob_list_cashflow = []
