@@ -106,15 +106,10 @@ def main():
                     # From the sorted list, get the best page, taking into account "loners".
                     page_income, page_balancesheets, page_cashflow, count_loners = get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loners)
 
-                    # converting pages numbers to string to match labeled data
-                    key_pages.get(company).get(doc_name).update({"Income": str(page_income)})      
-                    print("Income page no.: ", page_income)
-
+                    # update key_pages dictionary. pages numbers as strings to match labeled data  
+                    key_pages.get(company).get(doc_name).update({"Income": str(page_income)})    
                     key_pages.get(company).get(doc_name).update({"Balance Sheets": str(page_balancesheets)}) 
-                    print("Balance Sheets page no.: ", page_balancesheets)
-
                     key_pages.get(company).get(doc_name).update({"Cash Flows": str(page_cashflow)}) 
-                    print("Cash Flows page no.: ", page_cashflow)
 
 
                 # Done going through pages
