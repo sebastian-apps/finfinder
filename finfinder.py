@@ -84,13 +84,13 @@ def main():
 
                             print("posterior = likelihood * prior / evidence")
                             # do Income Statement
-                            posterior_income = bayesian(text, nbc_probs, "Income", "is_class")
+                            posterior_income = bayesian(text, nbc_probs, "Income")
                             prob_list_income.append(posterior_income)
                             # do Balance Sheets
-                            posterior_balancesheets = bayesian(text, nbc_probs, "Balance Sheets", "is_class")
+                            posterior_balancesheets = bayesian(text, nbc_probs, "Balance Sheets")
                             prob_list_balancesheets.append(posterior_balancesheets)
                             # do Cashflow Statement
-                            posterior_cashflow = bayesian(text, nbc_probs, "Cash Flows", "is_class")
+                            posterior_cashflow = bayesian(text, nbc_probs, "Cash Flows")
                             prob_list_cashflow.append(posterior_cashflow)
 
                         except Exception as e:
@@ -104,7 +104,8 @@ def main():
                     pages_balancesheets = get_sorted_pages(prob_list_balancesheets)
                     pages_cashflow = get_sorted_pages(prob_list_cashflow)
                     # From the sorted list, get the best page, taking into account "loners".
-                    page_income, page_balancesheets, page_cashflow, count_loners = get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loners)
+                    page_income, page_balancesheets, page_cashflow, loners = get_best_page(pages_income, pages_balancesheets, pages_cashflow)
+                    count_loners += loners
 
                     # update key_pages dictionary. pages numbers as strings to match labeled data  
                     key_pages.get(company).get(doc_name).update({"Income": str(page_income)})    
@@ -144,22 +145,22 @@ def main():
 
 
 
-def bayesian(text, nbc_probs, category, nb_class):
+def bayesian(text, nbc_probs, category, nb_class="is_class"):
     """
     INPUTS:
     text (str): the text in a page of PDF
     nbc_probs (dict): the dictionary containing all Naive Bayes classifier probabilities
     category (str): "Income" or "Balance Sheets" or "Cash Flows"
-    nb_class (str): "in_class" or "not_in_class", whether or not it belongs to the category
+    nb_class (str): "is_class" or "is_not_class", whether or not it belongs to the category
 
     OUTPUT:
     the posterior of the Bayes equation
 
 
     EQUATION: POSTERIOR = (LIKELIHOOD * PRIOR) / EVIDENCE
-    LIKELIHOOD: For all keywords that were found, multiply their probabilities (either from "in_class" or "not_in_class")
-    PRIOR: The overall probability of "in_class" or "not_in_class" occurring.
-    EVIDENCE: For all keywords found, multiply their overall probabilities of occurring *regardless* of "in_class" or "not_in_class".
+    LIKELIHOOD: For all keywords that were found, multiply their probabilities (either from "is_class" or "is_not_class")
+    PRIOR: The overall probability of "is_class" or "is_not_class" occurring.
+    EVIDENCE: For all keywords found, multiply their overall probabilities of occurring regardless of "is_class" or "is_not_class".
     (Another name is the Predictor Prior Probability)
 
     Alternatives to the equation (but didn't seem to work well):
@@ -209,7 +210,7 @@ def get_sorted_pages(prob_list):
 
 
 
-def get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loners):
+def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
     """
     The best page for a category (Income, Balance Sheets, Cash Flow) is often the page associated with
     the highest Bayesian posterior. In an annual report, all 3 pages are always closely located
@@ -221,9 +222,10 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loner
     count_balancesheets = 0
     count_cashflow = 0
     loner = 999
+    total_loners = 0
 
     while loner is not None:
-        count_loners += 1
+        total_loners += 1
         a = pages_income[count_income]
         b = pages_balancesheets[count_balancesheets]
         c = pages_cashflow[count_cashflow]
@@ -240,7 +242,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow, count_loner
     page_income = a + 1
     page_balancesheets = b + 1
     page_cashflow = c + 1
-    return page_income, page_balancesheets, page_cashflow, count_loners
+    return page_income, page_balancesheets, page_cashflow, total_loners
 
 
 
