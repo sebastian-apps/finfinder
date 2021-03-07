@@ -31,7 +31,6 @@ def clean_text(text):
     text = text.lower()
     text = ''.join([i for i in text if not i.isdigit()]) # remove all numbers/digits
 
-    # Because it's from tabula json
     text = text.replace(u"\u2018", "'").replace(u"\u2019", "'").replace("\u2013","-").replace("\u2014","-")
     text = text.replace("..","")
     text = text.replace("  "," ").replace("- ","").replace(". ","").replace(". ","")
