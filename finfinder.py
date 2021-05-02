@@ -22,12 +22,10 @@ Note: Resulting page numbers correspond to PDF page numbers, not the numbers pri
 """
 
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter  # pip install pdfminer2
-from pdfminer.converter import HTMLConverter
-from pdfminer.converter import TextConverter
+from pdfminer.converter import HTMLConverter, TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
-from io import BytesIO
-from io import StringIO
+from io import BytesIO, StringIO
 import os, glob
 from datetime import date, datetime
 import lib.json_lib as jl
@@ -36,7 +34,7 @@ import lib.utils as u
 
 
 DIRECTORY = "companies"
-
+THRESH_LONER = 6
 
 def main():
 
@@ -83,12 +81,15 @@ def main():
                             text = u.clean_text(text)
 
                             print("posterior = likelihood * prior / evidence")
+                            
                             # do Income Statement
                             posterior_income = bayesian(text, nbc_probs, "Income")
                             prob_list_income.append(posterior_income)
+                            
                             # do Balance Sheets
                             posterior_balancesheets = bayesian(text, nbc_probs, "Balance Sheets")
                             prob_list_balancesheets.append(posterior_balancesheets)
+                            
                             # do Cashflow Statement
                             posterior_cashflow = bayesian(text, nbc_probs, "Cash Flows")
                             prob_list_cashflow.append(posterior_cashflow)
@@ -104,6 +105,8 @@ def main():
                     pages_balancesheets = get_sorted_pages(prob_list_balancesheets)
                     pages_cashflow = get_sorted_pages(prob_list_cashflow)
                     # From the sorted list, get the best page, taking into account "loners".
+                    # Statements are always only a few pages apart. If detected page exceeds THRESH_LONER, consider it a "loner" page,
+                    # which probably does not actually represent a statement.
                     page_income, page_balancesheets, page_cashflow, loners = get_best_page(pages_income, pages_balancesheets, pages_cashflow)
                     count_loners += loners
 
@@ -231,7 +234,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
         c = pages_cashflow[count_cashflow]
         contenders = [a, b, c]
 
-        loner = is_loner_present(contenders, 6)  # tried 10, got 0.48 accuracy
+        loner = is_loner_present(contenders, THRESH_LONER)  # tried 10, got 0.48 accuracy
         if loner == 0:
             count_income += 1
         elif loner == 1:
