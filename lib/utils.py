@@ -24,7 +24,7 @@ def clean_text(text):
     FOR NAIVE-BAYES CLASSIFICATION
     Both the keyword generating algorithm (generate_keywords) and the Naive Bayes training algorithm (naive-bayes-train) should clean text to achieve same text.
     However, generate_keywords uses json from T. and naive-bayes-train uses text from pdfminer.
-    Therefore, warning - the text is treated differently. Be careful.
+    Therefore, warning - the text is treated differently. 
     """
     text = text.lower()
     text = ''.join([i for i in text if not i.isdigit()]) # remove all numbers/digits
