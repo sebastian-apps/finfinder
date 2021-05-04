@@ -4,12 +4,10 @@ General Utilities for FinFinder
 
 
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import HTMLConverter
-from pdfminer.converter import TextConverter
+from pdfminer.converter import HTMLConverter, TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
-from io import BytesIO
-from io import StringIO
+from io import BytesIO, StringIO
 from pdfrw import PdfReader
 from datetime import date, datetime
 
@@ -25,7 +23,7 @@ def clean_text(text):
     """
     FOR NAIVE-BAYES CLASSIFICATION
     Both the keyword generating algorithm (generate_keywords) and the Naive Bayes training algorithm (naive-bayes-train) should clean text to achieve same text.
-    However, generate_keywords uses json from tabula and naive-bayes-train uses text from pdfminer.
+    However, generate_keywords uses json from T. and naive-bayes-train uses text from pdfminer.
     Therefore, warning - the text is treated differently. Be careful.
     """
     text = text.lower()
