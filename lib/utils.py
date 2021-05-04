@@ -81,14 +81,21 @@ def convert_CSV_to_XLSX():
         wb.save(remove_file_extension(filename)+ '.xlsx')
         os.remove(filename)
 
+        
+        
+        
 """ PDF UTILITIES """
 
+
 def pdf_page_count(filepath):
-    num_pages = len(PdfReader(filepath).pages)
+    """
+    Return the number of pages.
+    """
+    return len(PdfReader(filepath).pages)
     # old way below...
     # read_pdf = PyPDF2.PdfFileReader(filepath)
-    # num_pages = read_pdf.getNumPages()
-    return num_pages
+    # return read_pdf.getNumPages()
+
 
 
 def convert_pdf_to_txt(fp, pagenos):
