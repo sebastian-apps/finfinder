@@ -111,7 +111,6 @@ def convert_pdf_to_txt(fp, pagenos):
         interpreter.process_page(page)
 
     text = retstr.getvalue()
-    # fp.close()
     device.close()
     retstr.close()
     return str(text, 'utf-8')
