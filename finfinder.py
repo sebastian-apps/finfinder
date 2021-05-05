@@ -140,7 +140,7 @@ def main():
         "Loners found": count_loners,
         "Total files processed": filenum,
         }
-    print(data)
+    # print(data)
     return key_pages, data
 
 
