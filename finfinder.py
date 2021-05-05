@@ -80,8 +80,6 @@ def main():
                             text = u.convert_pdf_to_txt(fp, {pagenum})
                             text = u.clean_text(text)
 
-                            print("posterior = likelihood * prior / evidence")
-                            
                             # do Income Statement
                             posterior_income = bayesian(text, nbc_probs, "Income")
                             prob_list_income.append(posterior_income)
@@ -196,7 +194,7 @@ def bayesian(text, nbc_probs, category, nb_class="is_class"):
     prior = nbc_probs.get(category).get("prior")
     # Calculate Posterior
     posterior = likelihood * prior / evidence
-    print(f"{category} posterior: {posterior} = {likelihood} * {prior} / {evidence}")
+    # print(f"{category} posterior: {posterior} = {likelihood} * {prior} / {evidence}")
     return posterior
 
 
