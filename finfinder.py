@@ -151,14 +151,13 @@ def main():
 
 
 class BayesianClassifier:
-    def __init__(self, nbc):
-        self.nbc_probs = nbc
+    def __init__(self, nbc_probs):
+        self.nbc_probs = nbc_probs
 
     def bayesian(self, text, category, nb_class="is_class"):
         """
         INPUTS:
         text (str): the text in a page of PDF
-        nbc_probs (dict): the dictionary containing all Naive Bayes classifier probabilities
         category (str): "Income" or "Balance Sheets" or "Cash Flows"
         nb_class (str): "is_class" or "is_not_class", whether or not it belongs to the category
 
