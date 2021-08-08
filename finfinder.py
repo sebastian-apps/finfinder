@@ -38,13 +38,19 @@ THRESH_LONER = 6
 
 def main():
 
-    nbc_probs = jl.read_jsonfile("classifier-probs.json") # Naive Bayes classifier probabilities
+
+    # Load Naive Bayes classifier probabilities from classifier-probs.json
+    classifier = BayesianClassifier(jl.read_jsonfile("classifier-probs.json"))
+
     key_pages = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
     errors_page = 0 # Number of errors involving page errors
     errors_file = 0 # Number of errors involving the file itself
     exceptions_details = [] # Details of exceptions
     count_loners = 0 # Number of "loner" values found
+
+
+
 
     for dir in glob.glob(f"{DIRECTORY}/*/"): # Loop through every company directory
         company = u.clean_dir_name(dir, DIRECTORY)
@@ -81,16 +87,13 @@ def main():
                             text = u.clean_text(text)
 
                             # do Income Statement
-                            posterior_income = bayesian(text, nbc_probs, "Income")
-                            prob_list_income.append(posterior_income)
+                            prob_list_income.append(classifier.bayesian(text, "Income"))
                             
                             # do Balance Sheets
-                            posterior_balancesheets = bayesian(text, nbc_probs, "Balance Sheets")
-                            prob_list_balancesheets.append(posterior_balancesheets)
+                            prob_list_balancesheets.append(classifier.bayesian(text, "Balance Sheets"))
                             
                             # do Cashflow Statement
-                            posterior_cashflow = bayesian(text, nbc_probs, "Cash Flows")
-                            prob_list_cashflow.append(posterior_cashflow)
+                            prob_list_cashflow.append(classifier.bayesian(text, "Cash Flows"))
 
                         except Exception as e:
                             errors_page += 1
@@ -146,56 +149,62 @@ def main():
 
 
 
-def bayesian(text, nbc_probs, category, nb_class="is_class"):
-    """
-    INPUTS:
-    text (str): the text in a page of PDF
-    nbc_probs (dict): the dictionary containing all Naive Bayes classifier probabilities
-    category (str): "Income" or "Balance Sheets" or "Cash Flows"
-    nb_class (str): "is_class" or "is_not_class", whether or not it belongs to the category
 
-    OUTPUT:
-    the posterior of the Bayes equation
+class BayesianClassifier:
+    def __init__(self, nbc):
+        self.nbc_probs = nbc
+
+    def bayesian(self, text, category, nb_class="is_class"):
+        """
+        INPUTS:
+        text (str): the text in a page of PDF
+        nbc_probs (dict): the dictionary containing all Naive Bayes classifier probabilities
+        category (str): "Income" or "Balance Sheets" or "Cash Flows"
+        nb_class (str): "is_class" or "is_not_class", whether or not it belongs to the category
+
+        OUTPUT:
+        the posterior of the Bayes equation
 
 
-    EQUATION: POSTERIOR = (LIKELIHOOD * PRIOR) / EVIDENCE
-    LIKELIHOOD: For all keywords that were found, multiply their probabilities (either from "is_class" or "is_not_class")
-    PRIOR: The overall probability of "is_class" or "is_not_class" occurring.
-    EVIDENCE: For all keywords found, multiply their overall probabilities of occurring regardless of "is_class" or "is_not_class".
-    (Another name is the Predictor Prior Probability)
+        EQUATION: POSTERIOR = (LIKELIHOOD * PRIOR) / EVIDENCE
+        LIKELIHOOD: For all keywords that were found, multiply their probabilities (either from "is_class" or "is_not_class")
+        PRIOR: The overall probability of "is_class" or "is_not_class" occurring.
+        EVIDENCE: For all keywords found, multiply their overall probabilities of occurring regardless of "is_class" or "is_not_class".
+        (Another name is the Predictor Prior Probability)
 
-    Alternatives to the equation (but didn't seem to work well):
-    Option 1) posterior = likelihood + prior   ....evidence eliminated
-    Option 2) Using log of probabilities
-    
-    """
+        Alternatives to the equation (but didn't seem to work well):
+        Option 1) posterior = likelihood + prior   ....evidence eliminated
+        Option 2) Using log of probabilities
+        
+        """
 
-    # Search for all relevant keywords in text
-    keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys() if keyword in text]
-    #keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys()]  # Calculate for ALL keywords, not just the ones found.
+        # Search for all relevant keywords in text
+        keyword_list = [keyword for keyword in self.nbc_probs.get(category).get(nb_class).keys() if keyword in text]
+        #keyword_list = [keyword for keyword in nbc_probs.get(category).get(nb_class).keys()]  # Calculate for ALL keywords, not just the ones found.
 
-    # Calculate Likelihood and Evidence
-    likelihood = 1
-    p_list = []
-    evidence = 1
-    for keyword in keyword_list:
-        p = likelihood*nbc_probs.get(category).get(nb_class).get(keyword)
-        if round(p,1) != 0.0:  # Zero will give a likelihood of zero and thus a posterior of zero. Not desired.
-            p_list.append(p)
-            likelihood = (likelihood*p)
-        evidence = evidence*nbc_probs.get(category).get("evidence").get(keyword)
+        # Calculate Likelihood and Evidence
+        likelihood = 1
+        p_list = []
+        evidence = 1
+        for keyword in keyword_list:
+            p = likelihood*self.nbc_probs.get(category).get(nb_class).get(keyword)
+            if round(p,1) != 0.0:  # Zero will give a likelihood of zero and thus a posterior of zero. Not desired.
+                p_list.append(p)
+                likelihood = (likelihood*p)
+            evidence = evidence*self.nbc_probs.get(category).get("evidence").get(keyword)
 
-    if likelihood == 0.0:
-        print("Likelihood value is zero. p_list:", p_list)
-    if evidence == 0.0:
-        print("Evidence value is zero. p_list:", p_list)
+        if likelihood == 0.0:
+            print("Likelihood value is zero. p_list:", p_list)
+        if evidence == 0.0:
+            print("Evidence value is zero. p_list:", p_list)
 
-    # Get Prior
-    prior = nbc_probs.get(category).get("prior")
-    # Calculate Posterior
-    posterior = likelihood * prior / evidence
-    # print(f"{category} posterior: {posterior} = {likelihood} * {prior} / {evidence}")
-    return posterior
+        # Get Prior
+        prior = self.nbc_probs.get(category).get("prior")
+        # Calculate Posterior
+        posterior = likelihood * prior / evidence
+        # print(f"{category} posterior: {posterior} = {likelihood} * {prior} / {evidence}")
+        return posterior
+
 
 
 
@@ -230,9 +239,8 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
         a = pages_income[count_income]
         b = pages_balancesheets[count_balancesheets]
         c = pages_cashflow[count_cashflow]
-        contenders = [a, b, c]
-
-        loner = is_loner_present(contenders, THRESH_LONER)  # tried 10, got 0.48 accuracy
+  
+        loner = is_loner_present([a, b, c], THRESH_LONER)  # tried 10, got 0.48 accuracy
         if loner == 0:
             count_income += 1
         elif loner == 1:
@@ -258,9 +266,7 @@ def is_loner_present(num_list, threshold):
     """
 
     try:
-        a = int(num_list[0])
-        b = int(num_list[1])
-        c = int(num_list[2])
+        a, b, c = int(num_list[0]), int(num_list[1]), int(num_list[2])
     except:
         return None
 
