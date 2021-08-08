@@ -239,7 +239,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
         b = pages_balancesheets[count_balancesheets]
         c = pages_cashflow[count_cashflow]
   
-        loner = is_loner_present([a, b, c], THRESH_LONER)  # tried 10, got 0.48 accuracy
+        loner = loner_present([a, b, c], THRESH_LONER)  # tried 10, got 0.48 accuracy
         if loner == 0:
             count_income += 1
         elif loner == 1:
@@ -256,7 +256,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
 
 
 
-def is_loner_present(num_list, threshold):
+def loner_present(num_list, threshold):
     """
     In a group of three numbers, is one a loner?
     More specifically, does one value have a distance greater than threshold w.r.t
