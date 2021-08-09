@@ -151,7 +151,6 @@ def get_statement_pages(probsfile, directory):
         "Loners found": count_loners,
         "Total files processed": filenum,
         }
-    # print(data)
     return key_pages, data
 
 
