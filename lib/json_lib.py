@@ -48,3 +48,12 @@ def pretty_print(dict):
     Warning: by converting to JSON, sets will be represented as lists
     """
     print(json.dumps(dict, cls=SetEncoder, indent=4))  # option: sort_keys=True
+
+
+def pretty_string(dict):
+    """
+    Makes legible by converting to json and serializing
+    Warning: by converting to JSON, sets will be represented as lists
+    """
+    return json.dumps(dict, cls=SetEncoder, indent=4) # option: sort_keys=True
+
