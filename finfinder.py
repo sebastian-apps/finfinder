@@ -33,14 +33,29 @@ import lib.utils as u
 
 
 
-DIRECTORY = "companies"
+PDF_DIRECTORY = "companies"
 THRESH_LONER = 6
+
+
+
+
 
 def main():
 
+    pages, _ = get_statement_pages(jl.read_jsonfile("classifier-probs.json"), PDF_DIRECTORY)
 
+    # output results
+    jl.pretty_print(pages)
+    jl.write_jsonfile(pages, f"finfinder-report-{u.clean_utctime()}.json")
+
+
+
+
+
+
+def get_statement_pages(probsfile, directory):
     # Load Naive Bayes classifier probabilities from classifier-probs.json
-    classifier = BayesianClassifier(jl.read_jsonfile("classifier-probs.json"))
+    classifier = BayesianClassifier(probsfile)
 
     key_pages = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
@@ -52,8 +67,8 @@ def main():
 
 
 
-    for dir in glob.glob(f"{DIRECTORY}/*/"): # Loop through every company directory
-        company = u.clean_dir_name(dir, DIRECTORY)
+    for dir in glob.glob(f"{directory}/*/"): # Loop through every company directory
+        company = u.clean_dir_name(dir, directory)
         print("\nDIRECTORY: ", dir)
         print("COMPANY: ", company, "\n")
         # create new dictionary for the company
@@ -62,7 +77,7 @@ def main():
 
         # loop through every financial PDF
         # file is path + filename + extension from local folder where this script is running
-        for file in glob.glob(f"{DIRECTORY}/{company}/*.pdf"):
+        for file in glob.glob(f"{directory}/{company}/*.pdf"):
 
             if "._" not in file:  # ignore hidden files
                 try:
@@ -127,14 +142,7 @@ def main():
                 filenum += 1  # tally total files processed
                 fp.close()
 
-
-
         # End for loop
-
-    # output results
-    jl.pretty_print(key_pages)
-    jl.write_jsonfile(key_pages, f"finfinder-report-{u.clean_utctime()}.json")
-
 
     data = {
         #"Exceptions details": exceptions_details,
