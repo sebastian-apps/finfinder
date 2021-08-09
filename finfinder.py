@@ -281,15 +281,15 @@ def loner_present(num_list, threshold):
     d_bc = abs(b - c)
 
     if d_ab >= threshold and d_ac >= threshold and d_bc < threshold:
-        num_pos = 0  # a is the loner
+        pos = 0  # a is the loner
     elif d_ab >= threshold and d_ac < threshold and d_bc >= threshold:
-        num_pos = 1 # b is the loner
+        pos = 1 # b is the loner
     elif d_ab < threshold and d_ac >= threshold and d_bc >= threshold:
-        num_pos = 2 # c is the loner
+        pos = 2 # c is the loner
     else:
         # Everyone is close enough, or all three are spread apart.
         return None
-    return num_pos
+    return pos
 
 
 
