@@ -144,14 +144,14 @@ def get_statement_pages(probsfile, directory):
 
         # End for loop
 
-    data = {
+    errors = {
         #"Exceptions details": exceptions_details,
         "Page errors": errors_page,
         "File errors": errors_file,
         "Loners found": count_loners,
         "Total files processed": filenum,
         }
-    return key_pages, data
+    return key_pages, errors
 
 
 
@@ -169,7 +169,7 @@ class BayesianClassifier:
         nb_class (str): "is_class" or "is_not_class", whether or not it belongs to the category
 
         OUTPUT:
-        the posterior of the Bayes equation
+        the posterior (float) of the Bayes equation
 
 
         EQUATION: POSTERIOR = (LIKELIHOOD * PRIOR) / EVIDENCE
