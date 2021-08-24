@@ -21,10 +21,6 @@ class SetEncoder(json.JSONEncoder):
 
 
 def write_jsonfile(dict, filename):
-    """
-    Good practice: give the file .json extension
-    To do: Check if file already exists
-    """
     data = dict2json(dict)
     f = open(filename,"w")
     f.write(data)
