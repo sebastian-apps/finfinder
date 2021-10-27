@@ -50,9 +50,9 @@ def main():
 
 
 
-def get_statement_pages(probsfile, directory):
+def get_statement_pages(probs_json, directory):
     # Load Naive Bayes classifier probabilities from classifier-probs.json
-    classifier = BayesianClassifier(probsfile)
+    classifier = BayesianClassifier(probs_json)
 
     key_pages = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
@@ -63,17 +63,19 @@ def get_statement_pages(probsfile, directory):
 
 
 
+    # Loop through every company directory
+    for dir in glob.glob(f"{directory}/*/"): 
 
-    for dir in glob.glob(f"{directory}/*/"): # Loop through every company directory
         company = u.clean_dir_name(dir, directory)
-        print("\nDIRECTORY: ", dir)
-        print("COMPANY: ", company, "\n")
+        print(f"\nDIRECTORY: {dir} \nCOMPANY: {company}\n")
         # create new dictionary for the company
         key_pages.update({company: {}})
 
 
-        # loop through every financial PDF
-        # file is path + filename + extension from local folder where this script is running
+        """ 
+        loop through every financial PDF
+        file is path + filename + extension from local folder where this script is running
+        """
         for file in glob.glob(f"{directory}/{company}/*.pdf"):
 
             if "._" not in file:  # ignore hidden files
@@ -83,7 +85,7 @@ def get_statement_pages(probsfile, directory):
                     key_pages.get(company).update({doc_name: {}}) # create new doc dictionary for the company
                     maxpages = u.pdf_page_count(file)
                     print("No. pages in doc: ", maxpages)
-                    fp = open(file, 'rb')  # rb instead of r
+                    fp = open(file, 'rb')
 
                     # Every page will have an associated probability
                     prob_list_income = []
