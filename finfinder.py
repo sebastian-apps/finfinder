@@ -34,9 +34,6 @@ import lib.utils as u
 
 
 PDF_DIRECTORY = "companies"
-THRESH_LONER = 6
-
-
 
 
 
@@ -121,7 +118,7 @@ def get_statement_pages(probsfile, directory):
                     pages_balancesheets = get_sorted_pages(prob_list_balancesheets)
                     pages_cashflow = get_sorted_pages(prob_list_cashflow)
                     # From the sorted list, get the best page, taking into account "loners".
-                    # Statements are always only a few pages apart. If detected page exceeds THRESH_LONER, consider it a "loner" page,
+                    # Statements are always only a few pages apart. If detected page exceeds threshold, consider it a "loner" page,
                     # which probably does not actually represent a statement.
                     page_income, page_balancesheets, page_cashflow, loners = get_best_page(pages_income, pages_balancesheets, pages_cashflow)
                     count_loners += loners
@@ -246,7 +243,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
         b = pages_balancesheets[count_balancesheets]
         c = pages_cashflow[count_cashflow]
   
-        loner = loner_present([a, b, c], THRESH_LONER)  # tried 10, got 0.48 accuracy
+        loner = loner_present([a, b, c], threshold=6)  # tried 10, got 0.48 accuracy
         if loner == 0:
             count_income += 1
         elif loner == 1:
