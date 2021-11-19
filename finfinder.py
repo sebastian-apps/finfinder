@@ -253,6 +253,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
         elif loner == 2:
             count_cashflow += 1
 
+    # Correction for 1-based indexing of PDF pages
     page_income = a + 1
     page_balancesheets = b + 1
     page_cashflow = c + 1
