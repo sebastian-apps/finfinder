@@ -51,7 +51,7 @@ def main():
 
 
 
-def get_statement_pages(probs_json: Dict[str, float], directory: str) -> Tuple[Dict[str, int], Dict[str, int]]:
+def get_statement_pages(probs_json: Dict[str, float], directory: str) -> Any:
     # Load Naive Bayes classifier probabilities from classifier-probs.json
     classifier = BayesianClassifier(probs_json)
 
