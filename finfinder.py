@@ -51,11 +51,11 @@ def main():
 
 
 
-def get_statement_pages(probs_json: Dict[str, float], directory: str) -> Any:
+def get_statement_pages(probs_json: Dict[str, Any], directory: str) -> Any:
     # Load Naive Bayes classifier probabilities from classifier-probs.json
     classifier = BayesianClassifier(probs_json)
 
-    key_pages: Any = {}  # All of the found pages. We are looking to fill this up.
+    key_pages = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
     errors_page = 0 # Number of errors involving page errors
     errors_file = 0 # Number of errors involving the file itself
@@ -215,7 +215,7 @@ class BayesianClassifier:
 
 
 
-def get_sorted_pages(prob_list: List[float]) -> List[int]:
+def get_sorted_pages(prob_list: List[Any]) -> List[int]:
     """ Sort pages from best to worst based on their posterior, where a higher posterior is better. """
     # Sort all listed probabilities highest to lowest, with page number in tuple.
     templist = sorted([(prob, pagenum) for pagenum, prob in enumerate(prob_list)], reverse=True)
