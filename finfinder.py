@@ -21,16 +21,17 @@ Note: Resulting page numbers correspond to PDF page numbers, not the numbers pri
 
 """
 
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter  # pip install pdfminer2
-from pdfminer.converter import HTMLConverter, TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
+# for pdfminer, pip install pdfminer2  
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter  # type: ignore    
+from pdfminer.converter import HTMLConverter, TextConverter # type: ignore
+from pdfminer.layout import LAParams # type: ignore
+from pdfminer.pdfpage import PDFPage # type: ignore
 from io import BytesIO, StringIO
-import os, glob
-from datetime import date, datetime
-import lib.json_lib as jl
-import lib.utils as u
-
+import os, glob 
+from datetime import date, datetime 
+import lib.json_lib as jl # type: ignore
+import lib.utils as u # type: ignore
+from typing import List, Dict, Tuple, Optional, Any
 
 
 PDF_DIRECTORY = "companies"
@@ -50,11 +51,11 @@ def main():
 
 
 
-def get_statement_pages(probs_json, directory):
+def get_statement_pages(probs_json: Dict[str, float], directory: str) -> Tuple[Dict[str, int], Dict[str, int]]:
     # Load Naive Bayes classifier probabilities from classifier-probs.json
     classifier = BayesianClassifier(probs_json)
 
-    key_pages = {}  # All of the found pages. We are looking to fill this up.
+    key_pages: Any = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
     errors_page = 0 # Number of errors involving page errors
     errors_file = 0 # Number of errors involving the file itself
@@ -160,7 +161,7 @@ class BayesianClassifier:
     def __init__(self, nbc_probs):
         self.nbc_probs = nbc_probs
 
-    def bayesian(self, text, category, nb_class="is_class"):
+    def bayesian(self, text: str, category: str, nb_class="is_class") -> float:
         """
         INPUTS:
         text (str): the text in a page of PDF
@@ -214,7 +215,7 @@ class BayesianClassifier:
 
 
 
-def get_sorted_pages(prob_list):
+def get_sorted_pages(prob_list: List[float]) -> List[int]:
     """ Sort pages from best to worst based on their posterior, where a higher posterior is better. """
     # Sort all listed probabilities highest to lowest, with page number in tuple.
     templist = sorted([(prob, pagenum) for pagenum, prob in enumerate(prob_list)], reverse=True)
@@ -225,7 +226,7 @@ def get_sorted_pages(prob_list):
 
 
 
-def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
+def get_best_page(pages_income: List[int], pages_balancesheets: List[int], pages_cashflow: List[int]) -> Tuple[int, int, int, int]:
     """
     The best page for a category (Income, Balance Sheets, Cash Flow) is often the page associated with
     the highest Bayesian posterior. In an annual report, all 3 pages are always closely located
@@ -236,7 +237,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
     count_income = 0
     count_balancesheets = 0
     count_cashflow = 0
-    loner = 999
+    loner: Optional[int] = 99999 # Not None or next loop fails
     total_loners = 0
 
     while loner is not None:
@@ -263,7 +264,7 @@ def get_best_page(pages_income, pages_balancesheets, pages_cashflow):
 
 
 
-def loner_present(num_list, threshold):
+def loner_present(num_list: List[int], threshold: int) -> Optional[int]:
     """
     In a group of three numbers, is one a loner?
     More specifically, does one value have a distance greater than threshold w.r.t
