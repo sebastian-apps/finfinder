@@ -26,9 +26,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter  # type: i
 from pdfminer.converter import HTMLConverter, TextConverter # type: ignore
 from pdfminer.layout import LAParams # type: ignore
 from pdfminer.pdfpage import PDFPage # type: ignore
-from io import BytesIO, StringIO
-import os, glob 
-from datetime import date, datetime 
+import glob 
 import lib.json_lib as jl # type: ignore
 import lib.utils as u # type: ignore
 from typing import List, Dict, Tuple, Optional, Any
@@ -51,11 +49,11 @@ def main():
 
 
 
-def get_statement_pages(probs_json: Dict[str, Any], directory: str) -> Any:
+def get_statement_pages(probs_json: Dict[str, Any], directory: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     # Load Naive Bayes classifier probabilities from classifier-probs.json
     classifier = BayesianClassifier(probs_json)
 
-    key_pages = {}  # All of the found pages. We are looking to fill this up.
+    key_pages: Any = {}  # All of the found pages. We are looking to fill this up.
     filenum = 0 # File number being processed
     errors_page = 0 # Number of errors involving page errors
     errors_file = 0 # Number of errors involving the file itself
