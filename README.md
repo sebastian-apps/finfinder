@@ -42,7 +42,7 @@ finfinder_env\Scripts\activate
 
 Install dependencies. The installation works best with Python 3.7.7.
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -52,6 +52,9 @@ pip install -r requirements.txt
 ## How to Use
 
 Run finfinder.py<br>
+```
+python finfinder.py
+```
 Results will be saved in a finfinder-report JSON file.
 
 Some example PDFs are included. 
