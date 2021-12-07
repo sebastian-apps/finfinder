@@ -15,7 +15,7 @@ Future versions of FinFinder will extract, transform, and load the financial dat
 
 Clone the repository.
 
-```bash
+```
 git clone https://github.com/sebastian-apps/finfinder.git
 ```
 
@@ -23,6 +23,8 @@ Create the virtual environment.
 
 ```
 cd finfinder
+```
+```
 python -m venv finfinder_env
 ```
 
