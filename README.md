@@ -2,7 +2,7 @@
 
 FinFinder finds financial statements. The algorithm parses annual reports in PDF format and finds the page numbers corresponding to the Income Statement, Balance Sheet, and Cash Flow Statement. Statements are detected with a Naive Bayes classifier.
 
-FinFinder is great where financial data are not readily available and organized in a database. For example, SEDAR.com provides all Canadian public securities documents in PDF format, but rarely in XBLR format. This is where FinFinder helps by locating important financial data. 
+FinFinder is great where financial data are not readily available and organized in a database. For example, SEDAR.com provides all Canadian public securities documents in PDF format, but rarely in XBRL format. This is where FinFinder helps by locating important financial data. 
 
 A test set of 278 annual report PDFs were analyzed, each containing an Income Statement, Balance Sheet, and Cash Flow Statement, for a total of 834 statements. Of those statements, 94% were correctly identified. 
 
