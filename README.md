@@ -28,7 +28,7 @@ cd finfinder
 python -m venv finfinder_env
 ```
 
-Activate the virtual environment <i>for OSX</i>.
+Activate the virtual environment <i>for Mac</i>.
 
 ```
 source finfinder_env/bin/activate
